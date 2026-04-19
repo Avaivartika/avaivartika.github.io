@@ -52,6 +52,20 @@ export function PixelWall() {
     let macroBlocks: MacroBlock[] = [];
     let trail: TrailPoint[] = [];
 
+    const fillRoundedRect = (
+      context: CanvasRenderingContext2D,
+      x: number,
+      y: number,
+      w: number,
+      h: number,
+      radius: number
+    ) => {
+      const r = Math.min(radius, w * 0.48, h * 0.48);
+      context.beginPath();
+      context.roundRect(x, y, w, h, r);
+      context.fill();
+    };
+
     const seeded = (x: number, y: number) => {
       const value = Math.sin(x * 12.9898 + y * 78.233) * 43758.5453;
       return value - Math.floor(value);
@@ -215,21 +229,9 @@ export function PixelWall() {
           const px = x * step;
           const py = y * step;
           ctx.fillStyle = outerFill;
-          ctx.fillRect(px, py, cell, cell);
+          fillRoundedRect(ctx, px, py, cell, cell, 2.2);
           ctx.fillStyle = innerFill;
-          ctx.fillRect(px + 1, py + 1, cell - 2, cell - 2);
-          ctx.fillStyle =
-            activation > 0.025
-              ? `rgba(${92 + Math.round(activation * 42)}, ${184 + Math.round(activation * 38)}, ${96 + Math.round(activation * 22)}, ${0.1 + activation * 0.1})`
-              : "rgba(255, 255, 255, 0.038)";
-          ctx.fillRect(px + 1, py + 1, cell - 2, 1);
-          ctx.fillRect(px + 1, py + 1, 1, cell - 2);
-          ctx.fillStyle =
-            activation > 0.025
-              ? `rgba(${8 + Math.round(activation * 8)}, ${56 + Math.round(activation * 24)}, ${10 + Math.round(activation * 8)}, ${0.2 + activation * 0.1})`
-              : "rgba(0, 0, 0, 0.18)";
-          ctx.fillRect(px + 1, py + cell - 2, cell - 2, 1);
-          ctx.fillRect(px + cell - 2, py + 1, 1, cell - 2);
+          fillRoundedRect(ctx, px + 1, py + 1, cell - 2, cell - 2, 1.6);
         }
       }
     };
