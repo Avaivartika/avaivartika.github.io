@@ -8,6 +8,14 @@ type Block = {
   tint: number;
 };
 
+type MacroBlock = {
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+  tint: number;
+};
+
 type TrailPoint = {
   x: number;
   y: number;
@@ -39,6 +47,7 @@ export function PixelWall() {
     let base = new Float32Array(0);
     let drift = new Float32Array(0);
     let blocks: Block[] = [];
+    let macroBlocks: MacroBlock[] = [];
     let trail: TrailPoint[] = [];
 
     const seeded = (x: number, y: number) => {
@@ -52,25 +61,38 @@ export function PixelWall() {
       base = new Float32Array(cols * rows);
       drift = new Float32Array(cols * rows);
       blocks = [];
+      macroBlocks = [];
 
       for (let y = 0; y < rows; y += 1) {
         for (let x = 0; x < cols; x += 1) {
           const index = y * cols + x;
           const coarse = seeded(Math.floor(x / 4), Math.floor(y / 4));
+          const medium = seeded(Math.floor(x / 2.6), Math.floor(y / 2.6));
           const fine = seeded(x * 0.83, y * 1.11);
-          base[index] = 0.08 + coarse * 0.1 + fine * 0.035;
+          base[index] = 0.06 + coarse * 0.12 + medium * 0.06 + fine * 0.025;
           drift[index] = seeded(x * 0.17, y * 0.37);
         }
       }
 
-      const blockCount = Math.floor((cols * rows) / 180);
+      const macroCount = Math.floor((cols * rows) / 900);
+      for (let i = 0; i < macroCount; i += 1) {
+        macroBlocks.push({
+          x: Math.floor(seeded(i, 1.7) * cols),
+          y: Math.floor(seeded(i, 3.9) * rows),
+          w: 8 + Math.floor(seeded(i, 5.1) * 10),
+          h: 8 + Math.floor(seeded(i, 7.2) * 10),
+          tint: seeded(i, 9.4) > 0.5 ? 0.11 : -0.09
+        });
+      }
+
+      const blockCount = Math.floor((cols * rows) / 160);
       for (let i = 0; i < blockCount; i += 1) {
         blocks.push({
           x: Math.floor(seeded(i, 2.1) * cols),
           y: Math.floor(seeded(i, 4.8) * rows),
           w: 3 + Math.floor(seeded(i, 6.5) * 6),
           h: 3 + Math.floor(seeded(i, 8.2) * 6),
-          tint: seeded(i, 9.9) > 0.56 ? 0.07 : -0.055
+          tint: seeded(i, 9.9) > 0.56 ? 0.08 : -0.065
         });
       }
     };
@@ -119,7 +141,7 @@ export function PixelWall() {
       trail = trail
         .map((point) => ({
           ...point,
-          life: point.life - 0.028
+          life: point.life - 0.034
         }))
         .filter((point) => point.life > 0);
 
@@ -127,6 +149,12 @@ export function PixelWall() {
         for (let x = 0; x < cols; x += 1) {
           const index = y * cols + x;
           let shade = base[index] + Math.sin(t * 0.75 + drift[index] * 10) * 0.008;
+
+          for (const block of macroBlocks) {
+            if (x >= block.x && x < block.x + block.w && y >= block.y && y < block.y + block.h) {
+              shade += block.tint;
+            }
+          }
 
           for (const block of blocks) {
             if (x >= block.x && x < block.x + block.w && y >= block.y && y < block.y + block.h) {
@@ -139,7 +167,7 @@ export function PixelWall() {
             const dx = x * step - point.x;
             const dy = y * step - point.y;
             const distance = Math.sqrt(dx * dx + dy * dy);
-            const radius = 72 + (1 - point.life) * 28;
+            const radius = 26 + (1 - point.life) * 14;
 
             if (distance < radius) {
               const local = (1 - distance / radius) * point.life;
@@ -150,16 +178,18 @@ export function PixelWall() {
           const cursorDx = x * step - pointerX;
           const cursorDy = y * step - pointerY;
           const cursorDistance = Math.sqrt(cursorDx * cursorDx + cursorDy * cursorDy);
-          if (cursorDistance < 44) {
-            activation = Math.max(activation, (1 - cursorDistance / 44) * 0.55);
+          if (cursorDistance < 20) {
+            activation = Math.max(activation, (1 - cursorDistance / 20) * 0.72);
           }
 
-          if (activation > 0.03) {
-            const value = Math.min(255, Math.round(124 + activation * 92));
-            const alpha = 0.46 + activation * 0.38;
-            ctx.fillStyle = `rgba(${value}, ${value}, ${value}, ${alpha})`;
+          if (activation > 0.025) {
+            const r = Math.round(28 + activation * 22);
+            const g = Math.round(132 + activation * 92);
+            const b = Math.round(28 + activation * 20);
+            const alpha = 0.42 + activation * 0.34;
+            ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${alpha})`;
           } else {
-            const channel = Math.max(18, Math.min(76, Math.round(16 + shade * 182)));
+            const channel = Math.max(14, Math.min(92, Math.round(10 + shade * 220)));
             ctx.fillStyle = `rgb(${channel}, ${channel}, ${channel})`;
           }
 
