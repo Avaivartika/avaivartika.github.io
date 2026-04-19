@@ -1,0 +1,54 @@
+---
+import { site } from "@/lib/site";
+import "@/styles/global.css";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { title = site.title, description = site.description } = Astro.props;
+---
+
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="icon" href="/favicon.svg" />
+  </head>
+  <body>
+    <div class="noise"></div>
+    <div class="orb orb-a"></div>
+    <div class="orb orb-b"></div>
+    <header class="topbar">
+      <a href="/" class="brand">
+        <span class="brand-kicker">Personal Router</span>
+        <strong>{site.title}</strong>
+      </a>
+      <nav class="dock-nav">
+        {site.nav.map((item) => (
+          <a href={item.href} class:list={{ active: Astro.url.pathname === item.href }}>
+            {item.label}
+          </a>
+        ))}
+      </nav>
+    </header>
+    <main class="page-shell">
+      <slot />
+    </main>
+    <footer class="footer">
+      <div>
+        <span class="pixel-label">Built for writing, shipping and linking ideas.</span>
+      </div>
+      <div class="footer-links">
+        <a href={`https://github.com/${site.githubUsername}`} target="_blank" rel="noreferrer">
+          GitHub
+        </a>
+        <a href="/feed.xml">RSS</a>
+      </div>
+    </footer>
+  </body>
+</html>

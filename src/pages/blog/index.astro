@@ -1,0 +1,27 @@
+---
+import EntryCard from "@/components/EntryCard.astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { getPublishedCollection, getReadingLabel } from "@/lib/content";
+import { formatDate } from "@/lib/site";
+
+const entries = await getPublishedCollection("blog");
+---
+
+<BaseLayout title="Blog">
+  <section class="list-page">
+    <div class="section-kicker">Archive / Blog</div>
+    <h1>博客文章</h1>
+    <p class="lead">适合正式发布的长文、方法论和完整项目复盘。</p>
+    <div class="grid-list">
+      {entries.map((entry) => (
+        <EntryCard
+          href={`/blog/${entry.id}/`}
+          title={entry.data.title}
+          description={entry.data.description}
+          meta={`${formatDate(entry.data.date)} / ${getReadingLabel(entry)}`}
+          tags={entry.data.tags}
+        />
+      ))}
+    </div>
+  </section>
+</BaseLayout>

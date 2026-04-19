@@ -1,0 +1,26 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { formatDate } from "@/lib/site";
+import { site } from "@/lib/site";
+
+interface Props {
+  title: string;
+  description: string;
+  date: Date;
+  tags?: string[];
+}
+
+const { title, description, date, tags = [] } = Astro.props;
+---
+
+<BaseLayout title={`${title} | ${site.title}`} description={description}>
+  <article class="post-shell card prose-shell">
+    <div class="section-kicker">Entry / {formatDate(date)}</div>
+    <h1>{title}</h1>
+    <p class="lead">{description}</p>
+    <div class="tag-row">
+      {tags.map((tag) => <span class="mini-pill">{tag}</span>)}
+    </div>
+    <slot />
+  </article>
+</BaseLayout>

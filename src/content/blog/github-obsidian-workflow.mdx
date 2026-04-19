@@ -1,0 +1,36 @@
+---
+title: "GitHub 与 Obsidian 的双向工作流"
+description: "用 GitHub 管项目，用 Obsidian 管知识，再用博客把结果发布出去。"
+date: 2026-04-18
+tags: ["github", "obsidian", "notes"]
+featured: true
+---
+
+我喜欢把内容拆成三层：
+
+1. `Obsidian` 负责草稿、灵感、随手记和研究资料。
+2. `GitHub` 负责项目代码、README、issue 和发布节奏。
+3. 个人博客负责把“过程”和“结果”整理成对外可读的版本。
+
+这个模板默认就为这三层留好了位置。
+
+## Obsidian 怎么进来
+
+运行：
+
+```bash
+npm run sync:obsidian -- "/path/to/your/vault"
+```
+
+脚本会把 Vault 里的 Markdown 笔记同步到 `src/content/notes`。
+
+## GitHub 怎么进来
+
+配置环境变量：
+
+```bash
+GITHUB_USERNAME=your-name
+GITHUB_TOKEN=ghp_xxx
+```
+
+如果设置了 token，会优先拉取 pinned repos；否则会回退到公开仓库列表。

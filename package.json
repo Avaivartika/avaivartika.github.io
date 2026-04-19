@@ -1,0 +1,28 @@
+{
+  "name": "router-notes-blog",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "sync:obsidian": "node ./scripts/sync-obsidian.mjs"
+  },
+  "dependencies": {
+    "@astrojs/mdx": "^5.0.3",
+    "@astrojs/react": "^5.0.3",
+    "@astrojs/rss": "^4.0.18",
+    "@astrojs/sitemap": "^3.7.2",
+    "astro": "^6.1.8",
+    "fuse.js": "^7.3.0",
+    "react": "^19.2.5",
+    "react-dom": "^19.2.5",
+    "reading-time": "^1.5.0",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.8"
+  }
+}

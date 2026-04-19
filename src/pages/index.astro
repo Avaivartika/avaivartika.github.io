@@ -1,0 +1,146 @@
+---
+import { SearchPanel } from "@/components/SearchPanel";
+import EntryCard from "@/components/EntryCard.astro";
+import RepoCard from "@/components/RepoCard.astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { getPublishedCollection, getReadingLabel, getSearchDocuments } from "@/lib/content";
+import { getGitHubOverview } from "@/lib/github";
+import { formatDate, site } from "@/lib/site";
+
+const [blog, notes, projects, docs, github] = await Promise.all([
+  getPublishedCollection("blog"),
+  getPublishedCollection("notes"),
+  getPublishedCollection("projects"),
+  getSearchDocuments(),
+  getGitHubOverview(site.githubUsername, import.meta.env.GITHUB_TOKEN)
+]);
+---
+
+<BaseLayout>
+  <section class="hero-grid">
+    <div class="hero-copy card">
+      <div class="section-kicker">Home / System Console</div>
+      <h1>
+        一个像 <span class="pixel-label">4router</span> 那样有辨识度的个人博客，
+        但更适合写作、展示项目和沉淀知识。
+      </h1>
+      <p class="lead">
+        这里同时承载博客文章、公开笔记、GitHub 项目和你的工作流。前端采用浅暖底色、像素点缀、
+        玻璃卡片与模块化信息区，让首页更像一个个人操作台。
+      </p>
+      <div class="hero-actions">
+        <a class="button-primary" href="/blog">读博客</a>
+        <a class="button-secondary" href="/notes">看笔记</a>
+      </div>
+      <div class="stat-row">
+        <div class="stat-card">
+          <strong>{blog.length}</strong>
+          <span>文章</span>
+        </div>
+        <div class="stat-card">
+          <strong>{notes.length}</strong>
+          <span>笔记</span>
+        </div>
+        <div class="stat-card">
+          <strong>{github.profile.publicRepos}</strong>
+          <span>公开仓库</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-side">
+      <section class="card profile-panel">
+        <div class="section-kicker">GitHub / Live Link</div>
+        <div class="profile-head">
+          <img src={github.profile.avatarUrl} alt={github.profile.login} />
+          <div>
+            <h2>{github.profile.login}</h2>
+            <p>{github.profile.bio}</p>
+          </div>
+        </div>
+        <div class="profile-stats">
+          <span>{github.profile.followers} followers</span>
+          <span>{github.profile.following} following</span>
+          <a href={github.profile.profileUrl} target="_blank" rel="noreferrer">
+            Open profile
+          </a>
+        </div>
+      </section>
+
+      <section class="card workflow-panel">
+        <div class="section-kicker">Workflow / Bridge</div>
+        <ol class="workflow-list">
+          <li>Obsidian 负责草稿、摘录和研究网络。</li>
+          <li>GitHub 负责代码、项目记录和发布节奏。</li>
+          <li>博客负责将过程整理成可公开阅读的作品。</li>
+        </ol>
+      </section>
+    </div>
+  </section>
+
+  <SearchPanel client:load documents={docs} />
+
+  <section class="section-block">
+    <div class="section-heading">
+      <div class="section-kicker">Latest / Blog</div>
+      <h2>最新文章</h2>
+    </div>
+    <div class="grid-list">
+      {blog.slice(0, 3).map((entry) => (
+        <EntryCard
+          href={`/blog/${entry.id}/`}
+          title={entry.data.title}
+          description={entry.data.description}
+          meta={`${formatDate(entry.data.date)} / ${getReadingLabel(entry)}`}
+          tags={entry.data.tags}
+        />
+      ))}
+    </div>
+  </section>
+
+  <section class="section-block">
+    <div class="section-heading">
+      <div class="section-kicker">Notes / Obsidian</div>
+      <h2>公开笔记</h2>
+    </div>
+    <div class="grid-list">
+      {notes.slice(0, 3).map((entry) => (
+        <EntryCard
+          href={`/notes/${entry.id}/`}
+          title={entry.data.title}
+          description={entry.data.description}
+          meta={`${formatDate(entry.data.date)} / ${entry.data.source}`}
+          tags={entry.data.tags}
+        />
+      ))}
+    </div>
+  </section>
+
+  <section class="section-block">
+    <div class="section-heading">
+      <div class="section-kicker">Repos / GitHub</div>
+      <h2>仓库与近期项目</h2>
+    </div>
+    <div class="grid-list">
+      {github.repos.map((repo) => <RepoCard repo={repo} />)}
+    </div>
+  </section>
+
+  <section class="section-block">
+    <div class="section-heading">
+      <div class="section-kicker">Projects / Focus</div>
+      <h2>现在在做什么</h2>
+    </div>
+    <div class="grid-list">
+      {projects.slice(0, 2).map((entry) => (
+        <EntryCard
+          href={`/projects/${entry.id}/`}
+          title={entry.data.title}
+          description={entry.data.description}
+          meta={`${formatDate(entry.data.date)} / ${entry.data.status}`}
+          tags={entry.data.tags}
+        />
+      ))}
+    </div>
+  </section>
+</BaseLayout>

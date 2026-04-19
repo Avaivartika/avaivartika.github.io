@@ -1,0 +1,27 @@
+---
+import EntryCard from "@/components/EntryCard.astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { getPublishedCollection, getReadingLabel } from "@/lib/content";
+import { formatDate } from "@/lib/site";
+
+const entries = await getPublishedCollection("notes");
+---
+
+<BaseLayout title="Notes">
+  <section class="list-page">
+    <div class="section-kicker">Archive / Notes</div>
+    <h1>公开笔记</h1>
+    <p class="lead">更轻、更快、更接近你 Obsidian 工作流的开放笔记区。</p>
+    <div class="grid-list">
+      {entries.map((entry) => (
+        <EntryCard
+          href={`/notes/${entry.id}/`}
+          title={entry.data.title}
+          description={entry.data.description}
+          meta={`${formatDate(entry.data.date)} / ${getReadingLabel(entry)}`}
+          tags={entry.data.tags}
+        />
+      ))}
+    </div>
+  </section>
+</BaseLayout>
