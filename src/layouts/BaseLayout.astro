@@ -1,6 +1,7 @@
 ---
 import { site } from "@/lib/site";
 import { CursorTrail } from "@/components/CursorTrail";
+import { PixelWall } from "@/components/PixelWall";
 import "@/styles/global.css";
 
 interface Props {
@@ -21,13 +22,12 @@ const { title = site.title, description = site.description } = Astro.props;
     <link rel="icon" href="/favicon.svg" />
   </head>
   <body>
+    <PixelWall client:load />
     <div class="noise"></div>
     <div class="cursor-spotlight"></div>
     <div class="liquid-blur liquid-blur-a"></div>
     <div class="liquid-blur liquid-blur-b"></div>
     <div class="liquid-blur liquid-blur-c"></div>
-    <div class="square-field square-field-a"></div>
-    <div class="square-field square-field-b"></div>
     <CursorTrail client:load />
     <header class="topbar">
       <a href="/" class="brand">
