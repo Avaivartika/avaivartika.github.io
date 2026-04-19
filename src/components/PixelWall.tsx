@@ -33,8 +33,8 @@ export function PixelWall() {
     if (!ctx) return;
 
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    const step = 12;
-    const cell = 10;
+    const step = 18;
+    const cell = 15;
     let width = 0;
     let height = 0;
     let cols = 0;
@@ -87,7 +87,7 @@ export function PixelWall() {
         });
       }
 
-      const blockCount = Math.floor((cols * rows) / 150);
+      const blockCount = Math.floor((cols * rows) / 140);
       for (let i = 0; i < blockCount; i += 1) {
         blocks.push({
           x: Math.floor(seeded(i, 2.1) * cols),
@@ -117,7 +117,7 @@ export function PixelWall() {
       const dx = clientX - lastTrailX;
       const dy = clientY - lastTrailY;
       const distance = Math.sqrt(dx * dx + dy * dy);
-      const segments = Math.max(1, Math.ceil(distance / 8));
+      const segments = Math.max(1, Math.ceil(distance / 4));
 
       for (let i = 1; i <= segments; i += 1) {
         const progress = i / segments;
@@ -131,7 +131,7 @@ export function PixelWall() {
       lastTrailX = clientX;
       lastTrailY = clientY;
 
-      while (trail.length > 30) {
+      while (trail.length > 40) {
         trail.shift();
       }
     };
@@ -157,7 +157,7 @@ export function PixelWall() {
       trail = trail
         .map((point) => ({
           ...point,
-          life: point.life - 0.048
+          life: point.life - 0.058
         }))
         .filter((point) => point.life > 0);
 
@@ -183,7 +183,7 @@ export function PixelWall() {
             const dx = x * step - point.x;
             const dy = y * step - point.y;
             const distance = Math.sqrt(dx * dx + dy * dy);
-            const radius = 12 + (1 - point.life) * 6;
+            const radius = 7 + (1 - point.life) * 3;
 
             if (distance < radius) {
               const local = (1 - distance / radius) * point.life;
@@ -194,22 +194,30 @@ export function PixelWall() {
           const cursorDx = x * step - pointerX;
           const cursorDy = y * step - pointerY;
           const cursorDistance = Math.sqrt(cursorDx * cursorDx + cursorDy * cursorDy);
-          if (cursorDistance < 10) {
-            activation = Math.max(activation, (1 - cursorDistance / 10) * 0.88);
+          if (cursorDistance < 5) {
+            activation = Math.max(activation, (1 - cursorDistance / 5) * 0.95);
           }
 
+          let outerFill = "";
+          let innerFill = "";
           if (activation > 0.025) {
             const r = Math.round(24 + activation * 18);
             const g = Math.round(138 + activation * 94);
             const b = Math.round(24 + activation * 16);
-            const alpha = 0.42 + activation * 0.32;
-            ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${alpha})`;
+            outerFill = `rgba(${Math.max(12, r - 14)}, ${Math.max(70, g - 38)}, ${Math.max(12, b - 12)}, ${0.72})`;
+            innerFill = `rgba(${r}, ${g}, ${b}, ${0.42 + activation * 0.32})`;
           } else {
             const channel = Math.max(14, Math.min(92, Math.round(10 + shade * 220)));
-            ctx.fillStyle = `rgb(${channel}, ${channel}, ${channel})`;
+            outerFill = `rgb(${Math.max(8, channel - 8)}, ${Math.max(8, channel - 8)}, ${Math.max(8, channel - 8)})`;
+            innerFill = `rgb(${Math.min(120, channel + 7)}, ${Math.min(120, channel + 7)}, ${Math.min(120, channel + 7)})`;
           }
 
-          ctx.fillRect(x * step, y * step, cell, cell);
+          const px = x * step;
+          const py = y * step;
+          ctx.fillStyle = outerFill;
+          ctx.fillRect(px, py, cell, cell);
+          ctx.fillStyle = innerFill;
+          ctx.fillRect(px + 1, py + 1, cell - 2, cell - 2);
         }
       }
     };
