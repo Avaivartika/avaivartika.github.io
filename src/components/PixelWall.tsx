@@ -34,7 +34,7 @@ export function PixelWall() {
 
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
     const step = 12;
-    const cell = 10;
+    const cell = 9;
     let width = 0;
     let height = 0;
     let cols = 0;
@@ -71,7 +71,7 @@ export function PixelWall() {
           const coarse = seeded(Math.floor(x / 4), Math.floor(y / 4));
           const medium = seeded(Math.floor(x / 2.6), Math.floor(y / 2.6));
           const fine = seeded(x * 0.83, y * 1.11);
-          base[index] = 0.06 + coarse * 0.12 + medium * 0.06 + fine * 0.025;
+          base[index] = 0.055 + coarse * 0.09 + medium * 0.05 + fine * 0.014;
           drift[index] = seeded(x * 0.17, y * 0.37);
         }
       }
@@ -83,7 +83,7 @@ export function PixelWall() {
           y: Math.floor(seeded(i, 3.9) * rows),
           w: 8 + Math.floor(seeded(i, 5.1) * 10),
           h: 8 + Math.floor(seeded(i, 7.2) * 10),
-          tint: seeded(i, 9.4) > 0.5 ? 0.11 : -0.09
+          tint: seeded(i, 9.4) > 0.7 ? 0.075 : -0.115
         });
       }
 
@@ -94,7 +94,7 @@ export function PixelWall() {
           y: Math.floor(seeded(i, 4.8) * rows),
           w: 3 + Math.floor(seeded(i, 6.5) * 6),
           h: 3 + Math.floor(seeded(i, 8.2) * 6),
-          tint: seeded(i, 9.9) > 0.56 ? 0.08 : -0.065
+          tint: seeded(i, 9.9) > 0.68 ? 0.052 : -0.07
         });
       }
     };
@@ -201,15 +201,15 @@ export function PixelWall() {
           let outerFill = "";
           let innerFill = "";
           if (activation > 0.025) {
-            const r = Math.round(24 + activation * 18);
-            const g = Math.round(138 + activation * 94);
-            const b = Math.round(24 + activation * 16);
-            outerFill = `rgba(${Math.max(12, r - 16)}, ${Math.max(70, g - 44)}, ${Math.max(12, b - 14)}, ${0.76})`;
-            innerFill = `rgba(${r}, ${g}, ${b}, ${0.42 + activation * 0.32})`;
+            const r = Math.round(28 + activation * 14);
+            const g = Math.round(138 + activation * 92);
+            const b = Math.round(28 + activation * 12);
+            outerFill = `rgba(${Math.max(12, r - 22)}, ${Math.max(72, g - 54)}, ${Math.max(12, b - 18)}, 0.86)`;
+            innerFill = `rgba(${r}, ${g}, ${b}, ${0.38 + activation * 0.24})`;
           } else {
-            const channel = Math.max(14, Math.min(92, Math.round(10 + shade * 220)));
-            outerFill = `rgb(${Math.max(8, channel - 8)}, ${Math.max(8, channel - 8)}, ${Math.max(8, channel - 8)})`;
-            innerFill = `rgb(${Math.min(120, channel + 7)}, ${Math.min(120, channel + 7)}, ${Math.min(120, channel + 7)})`;
+            const channel = Math.max(20, Math.min(82, Math.round(10 + shade * 182)));
+            outerFill = `rgb(${Math.max(12, channel - 8)}, ${Math.max(12, channel - 8)}, ${Math.max(12, channel - 8)})`;
+            innerFill = `rgb(${Math.min(98, channel + 2)}, ${Math.min(98, channel + 2)}, ${Math.min(98, channel + 2)})`;
           }
 
           const px = x * step;
@@ -220,9 +220,16 @@ export function PixelWall() {
           ctx.fillRect(px + 1, py + 1, cell - 2, cell - 2);
           ctx.fillStyle =
             activation > 0.025
-              ? "rgba(6, 26, 8, 0.72)"
-              : "rgba(5, 6, 8, 0.82)";
-          ctx.fillRect(px + Math.floor(cell / 2) - 1, py + Math.floor(cell / 2) - 1, 2, 2);
+              ? `rgba(${92 + Math.round(activation * 42)}, ${184 + Math.round(activation * 38)}, ${96 + Math.round(activation * 22)}, ${0.1 + activation * 0.1})`
+              : "rgba(255, 255, 255, 0.038)";
+          ctx.fillRect(px + 1, py + 1, cell - 2, 1);
+          ctx.fillRect(px + 1, py + 1, 1, cell - 2);
+          ctx.fillStyle =
+            activation > 0.025
+              ? `rgba(${8 + Math.round(activation * 8)}, ${56 + Math.round(activation * 24)}, ${10 + Math.round(activation * 8)}, ${0.2 + activation * 0.1})`
+              : "rgba(0, 0, 0, 0.18)";
+          ctx.fillRect(px + 1, py + cell - 2, cell - 2, 1);
+          ctx.fillRect(px + cell - 2, py + 1, 1, cell - 2);
         }
       }
     };
