@@ -33,8 +33,8 @@ export function PixelWall() {
     if (!ctx) return;
 
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    const step = 8;
-    const cell = 7;
+    const step = 12;
+    const cell = 10;
     let width = 0;
     let height = 0;
     let cols = 0;
@@ -43,6 +43,8 @@ export function PixelWall() {
     let previous = 0;
     let pointerX = window.innerWidth * 0.5;
     let pointerY = window.innerHeight * 0.3;
+    let lastTrailX = pointerX;
+    let lastTrailY = pointerY;
 
     let base = new Float32Array(0);
     let drift = new Float32Array(0);
@@ -85,7 +87,7 @@ export function PixelWall() {
         });
       }
 
-      const blockCount = Math.floor((cols * rows) / 160);
+      const blockCount = Math.floor((cols * rows) / 150);
       for (let i = 0; i < blockCount; i += 1) {
         blocks.push({
           x: Math.floor(seeded(i, 2.1) * cols),
@@ -111,13 +113,25 @@ export function PixelWall() {
     const addTrailPoint = (clientX: number, clientY: number) => {
       pointerX = clientX;
       pointerY = clientY;
-      trail.push({
-        x: clientX,
-        y: clientY,
-        life: 1
-      });
 
-      if (trail.length > 18) {
+      const dx = clientX - lastTrailX;
+      const dy = clientY - lastTrailY;
+      const distance = Math.sqrt(dx * dx + dy * dy);
+      const segments = Math.max(1, Math.ceil(distance / 8));
+
+      for (let i = 1; i <= segments; i += 1) {
+        const progress = i / segments;
+        trail.push({
+          x: lastTrailX + dx * progress,
+          y: lastTrailY + dy * progress,
+          life: 1
+        });
+      }
+
+      lastTrailX = clientX;
+      lastTrailY = clientY;
+
+      while (trail.length > 30) {
         trail.shift();
       }
     };
@@ -128,6 +142,8 @@ export function PixelWall() {
 
     const onLeave = () => {
       trail = [];
+      lastTrailX = pointerX;
+      lastTrailY = pointerY;
     };
 
     const render = (time: number) => {
@@ -141,7 +157,7 @@ export function PixelWall() {
       trail = trail
         .map((point) => ({
           ...point,
-          life: point.life - 0.034
+          life: point.life - 0.048
         }))
         .filter((point) => point.life > 0);
 
@@ -167,7 +183,7 @@ export function PixelWall() {
             const dx = x * step - point.x;
             const dy = y * step - point.y;
             const distance = Math.sqrt(dx * dx + dy * dy);
-            const radius = 26 + (1 - point.life) * 14;
+            const radius = 12 + (1 - point.life) * 6;
 
             if (distance < radius) {
               const local = (1 - distance / radius) * point.life;
@@ -178,15 +194,15 @@ export function PixelWall() {
           const cursorDx = x * step - pointerX;
           const cursorDy = y * step - pointerY;
           const cursorDistance = Math.sqrt(cursorDx * cursorDx + cursorDy * cursorDy);
-          if (cursorDistance < 20) {
-            activation = Math.max(activation, (1 - cursorDistance / 20) * 0.72);
+          if (cursorDistance < 10) {
+            activation = Math.max(activation, (1 - cursorDistance / 10) * 0.88);
           }
 
           if (activation > 0.025) {
-            const r = Math.round(28 + activation * 22);
-            const g = Math.round(132 + activation * 92);
-            const b = Math.round(28 + activation * 20);
-            const alpha = 0.42 + activation * 0.34;
+            const r = Math.round(24 + activation * 18);
+            const g = Math.round(138 + activation * 94);
+            const b = Math.round(24 + activation * 16);
+            const alpha = 0.42 + activation * 0.32;
             ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${alpha})`;
           } else {
             const channel = Math.max(14, Math.min(92, Math.round(10 + shade * 220)));

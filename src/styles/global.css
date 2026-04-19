@@ -216,14 +216,10 @@ img {
 .card {
   position: relative;
   overflow: hidden;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.08)),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 0 10px, transparent 10px 20px),
-    linear-gradient(rgba(255, 255, 255, 0.04) 0 10px, transparent 10px 20px);
-  background-size: auto, 20px 20px, 20px 20px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.07));
   border: 1px solid var(--border);
   border-radius: 32px;
-  backdrop-filter: blur(22px) saturate(150%);
+  backdrop-filter: blur(18px) saturate(145%);
   box-shadow:
     var(--shadow),
     inset 0 1px 0 rgba(255, 255, 255, 0.14);
@@ -235,24 +231,19 @@ img {
   inset: 0;
   background:
     radial-gradient(circle at top left, rgba(255, 255, 255, 0.12), transparent 30%),
-    linear-gradient(135deg, rgba(255, 255, 255, 0.08), transparent 48%),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 0 1px, transparent 1px 100%),
-    linear-gradient(rgba(255, 255, 255, 0.05) 0 1px, transparent 1px 100%);
-  background-size: auto, auto, 10px 10px, 10px 10px;
+    linear-gradient(135deg, rgba(255, 255, 255, 0.08), transparent 48%);
   pointer-events: none;
 }
 
 .card::after {
   content: "";
   position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background:
-    linear-gradient(90deg, rgba(255, 255, 255, 0.028) 0 8px, transparent 8px 16px),
-    linear-gradient(rgba(255, 255, 255, 0.028) 0 8px, transparent 8px 16px);
-  background-size: 16px 16px;
-  mix-blend-mode: screen;
-  opacity: 0.28;
+  inset: 10px;
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.08);
   pointer-events: none;
 }
 
