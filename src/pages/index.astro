@@ -20,13 +20,19 @@ const [blog, notes, projects, docs, github] = await Promise.all([
   <section class="hero-grid">
     <div class="hero-copy card">
       <div class="section-kicker">Home / System Console</div>
+      <div class="hero-corner hero-corner-a"></div>
+      <div class="hero-corner hero-corner-b"></div>
+      <div class="hero-floating-chip">liquid glass / cursor trail / square field</div>
       <h1>
-        一个像 <span class="pixel-label">4router</span> 那样有辨识度的个人博客，
-        但更适合写作、展示项目和沉淀知识。
+        液态玻璃质感的个人博客，
+        <br />
+        让写作、项目与研究网络
+        <br />
+        以更轻、更灵的方式同屏生长。
       </h1>
       <p class="lead">
-        这里同时承载博客文章、公开笔记、GitHub 项目和你的工作流。前端采用浅暖底色、像素点缀、
-        玻璃卡片与模块化信息区，让首页更像一个个人操作台。
+        这里同时承载博客文章、公开笔记、GitHub 项目和你的工作流。不是普通内容列表，
+        而是带有液态玻璃、高光折射、小方块矩阵与动态光标轨迹的个人工作界面。
       </p>
       <div class="hero-actions">
         <a class="button-primary" href="/blog">读博客</a>
@@ -69,6 +75,9 @@ const [blog, notes, projects, docs, github] = await Promise.all([
 
       <section class="card workflow-panel">
         <div class="section-kicker">Workflow / Bridge</div>
+        <div class="glass-mini-grid" aria-hidden="true">
+          {Array.from({ length: 18 }).map(() => <span></span>)}
+        </div>
         <ol class="workflow-list">
           <li>Obsidian 负责草稿、摘录和研究网络。</li>
           <li>GitHub 负责代码、项目记录和发布节奏。</li>
