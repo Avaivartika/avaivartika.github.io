@@ -1,6 +1,5 @@
 ---
 import { site } from "@/lib/site";
-import { CursorTrail } from "@/components/CursorTrail";
 import { PixelWall } from "@/components/PixelWall";
 import "@/styles/global.css";
 
@@ -24,11 +23,9 @@ const { title = site.title, description = site.description } = Astro.props;
   <body>
     <PixelWall client:load />
     <div class="noise"></div>
-    <div class="cursor-spotlight"></div>
     <div class="liquid-blur liquid-blur-a"></div>
     <div class="liquid-blur liquid-blur-b"></div>
     <div class="liquid-blur liquid-blur-c"></div>
-    <CursorTrail client:load />
     <header class="topbar">
       <a href="/" class="brand">
         <span class="brand-kicker">Personal Router</span>

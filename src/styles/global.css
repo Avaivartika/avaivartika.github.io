@@ -35,9 +35,7 @@ html {
 body {
   margin: 0;
   min-height: 100vh;
-  background:
-    radial-gradient(circle 260px at var(--pointer-x) var(--pointer-y), rgba(255, 255, 255, 0.11), transparent 68%),
-    radial-gradient(circle 620px at var(--pointer-x) var(--pointer-y), rgba(143, 229, 95, 0.05), transparent 72%);
+  background: transparent;
 }
 
 body::before,
@@ -75,7 +73,6 @@ img {
 
 .pixel-wall-canvas,
 .noise,
-.cursor-spotlight,
 .liquid-blur,
 .trail-canvas {
   position: fixed;
@@ -88,20 +85,12 @@ img {
 }
 
 .noise {
-  opacity: 0.06;
+  opacity: 0.035;
   background-image:
     radial-gradient(circle at 20% 18%, rgba(255, 255, 255, 0.14) 0 0.7px, transparent 0.8px),
     radial-gradient(circle at 68% 24%, rgba(255, 255, 255, 0.08) 0 0.7px, transparent 0.8px);
   background-size: 18px 18px;
   z-index: -5;
-}
-
-.cursor-spotlight {
-  background:
-    radial-gradient(circle 260px at var(--pointer-x) var(--pointer-y), rgba(255, 255, 255, 0.12), transparent 70%),
-    radial-gradient(circle 420px at var(--pointer-x) var(--pointer-y), rgba(143, 229, 95, 0.05), transparent 74%);
-  mix-blend-mode: screen;
-  z-index: -4;
 }
 
 .liquid-blur {
@@ -227,7 +216,11 @@ img {
 .card {
   position: relative;
   overflow: hidden;
-  background: linear-gradient(180deg, var(--surface-strong), var(--surface-deep));
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.08)),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 0 8px, transparent 8px 16px),
+    linear-gradient(rgba(255, 255, 255, 0.03) 0 8px, transparent 8px 16px);
+  background-size: auto, 16px 16px, 16px 16px;
   border: 1px solid var(--border);
   border-radius: 32px;
   backdrop-filter: blur(22px) saturate(150%);
@@ -242,7 +235,10 @@ img {
   inset: 0;
   background:
     radial-gradient(circle at top left, rgba(255, 255, 255, 0.12), transparent 30%),
-    linear-gradient(135deg, rgba(255, 255, 255, 0.08), transparent 48%);
+    linear-gradient(135deg, rgba(255, 255, 255, 0.08), transparent 48%),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 0 1px, transparent 1px 100%),
+    linear-gradient(rgba(255, 255, 255, 0.04) 0 1px, transparent 1px 100%);
+  background-size: auto, auto, 12px 12px, 12px 12px;
   pointer-events: none;
 }
 
