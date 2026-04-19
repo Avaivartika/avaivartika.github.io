@@ -22,18 +22,14 @@ const [blog, notes, projects, docs, github] = await Promise.all([
       <div class="section-kicker">Home / System Console</div>
       <div class="hero-corner hero-corner-a"></div>
       <div class="hero-corner hero-corner-b"></div>
-      <div class="hero-floating-chip">liquid glass / cursor trail / square field</div>
-      <h1>
-        液态玻璃质感的个人博客，
-        <br />
-        让写作、项目与研究网络
-        <br />
-        以更轻、更灵的方式同屏生长。
-      </h1>
-      <p class="lead">
-        这里同时承载博客文章、公开笔记、GitHub 项目和你的工作流。不是普通内容列表，
-        而是带有液态玻璃、高光折射、小方块矩阵与动态光标轨迹的个人工作界面。
-      </p>
+      <div class="hero-mark">
+        <div class="hero-orb">A</div>
+        <div class="hero-title-wrap">
+          <p class="hero-overline">LLM / ML / NOTES / PROJECTS</p>
+          <h1>Avaivartika</h1>
+          <p class="lead">把写作、研究、代码与项目进展组织成一个带液态玻璃感的个人界面。</p>
+        </div>
+      </div>
       <div class="hero-actions">
         <a class="button-primary" href="/blog">读博客</a>
         <a class="button-secondary" href="/notes">看笔记</a>
@@ -76,7 +72,7 @@ const [blog, notes, projects, docs, github] = await Promise.all([
       <section class="card workflow-panel">
         <div class="section-kicker">Workflow / Bridge</div>
         <div class="glass-mini-grid" aria-hidden="true">
-          {Array.from({ length: 18 }).map(() => <span></span>)}
+          {Array.from({ length: 28 }).map(() => <span></span>)}
         </div>
         <ol class="workflow-list">
           <li>Obsidian 负责草稿、摘录和研究网络。</li>

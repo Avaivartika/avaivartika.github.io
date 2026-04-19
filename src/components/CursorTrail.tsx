@@ -106,8 +106,8 @@ export function CursorTrail() {
           ctx.quadraticCurveTo(previous.x, previous.y, midX, midY);
         }
 
-        ctx.strokeStyle = "rgba(120, 94, 54, 0.16)";
-        ctx.lineWidth = 1.2;
+        ctx.strokeStyle = "rgba(184, 255, 147, 0.18)";
+        ctx.lineWidth = 1.4;
         ctx.stroke();
       }
 
@@ -120,17 +120,17 @@ export function CursorTrail() {
         ctx.rotate((1 - point.life) * 1.4);
 
         const glow = ctx.createRadialGradient(0, 0, 2, 0, 0, squareSize * 1.8);
-        glow.addColorStop(0, `rgba(255,255,255,${alpha * 0.7})`);
-        glow.addColorStop(0.35, `rgba(245,219,177,${alpha * 0.45})`);
-        glow.addColorStop(1, "rgba(245,219,177,0)");
+        glow.addColorStop(0, `rgba(255,255,255,${alpha * 0.9})`);
+        glow.addColorStop(0.3, `rgba(180,255,145,${alpha * 0.56})`);
+        glow.addColorStop(1, "rgba(180,255,145,0)");
         ctx.fillStyle = glow;
         ctx.beginPath();
         ctx.arc(0, 0, squareSize * 1.8, 0, Math.PI * 2);
         ctx.fill();
 
         roundedRect(ctx, -squareSize * 0.5, -squareSize * 0.5, squareSize, squareSize, 4);
-        ctx.fillStyle = `rgba(255, 250, 241, ${alpha})`;
-        ctx.strokeStyle = `rgba(137, 107, 63, ${alpha * 0.85})`;
+        ctx.fillStyle = `rgba(244, 255, 241, ${alpha})`;
+        ctx.strokeStyle = `rgba(177, 255, 138, ${alpha * 0.92})`;
         ctx.lineWidth = 1;
         ctx.fill();
         ctx.stroke();
@@ -138,9 +138,9 @@ export function CursorTrail() {
       });
 
       const pulse = ctx.createRadialGradient(lastX, lastY, 0, lastX, lastY, 180);
-      pulse.addColorStop(0, "rgba(255, 247, 232, 0.55)");
-      pulse.addColorStop(0.4, "rgba(242, 220, 186, 0.12)");
-      pulse.addColorStop(1, "rgba(242, 220, 186, 0)");
+      pulse.addColorStop(0, "rgba(255, 255, 255, 0.22)");
+      pulse.addColorStop(0.3, "rgba(180, 255, 145, 0.12)");
+      pulse.addColorStop(1, "rgba(180, 255, 145, 0)");
       ctx.fillStyle = pulse;
       ctx.beginPath();
       ctx.arc(lastX, lastY, 180, 0, Math.PI * 2);
