@@ -53,5 +53,26 @@ const { title = site.title, description = site.description } = Astro.props;
         <a href="/feed.xml">RSS</a>
       </div>
     </footer>
+    <script is:inline>
+      const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
+      const cards = Array.from(document.querySelectorAll(".card"));
+
+      cards.forEach((card) => {
+        card.addEventListener("pointermove", (event) => {
+          const rect = card.getBoundingClientRect();
+          const offsetX = (event.clientX - rect.left) / rect.width - 0.5;
+          const offsetY = (event.clientY - rect.top) / rect.height - 0.5;
+          const shiftX = clamp(offsetX * 10, -5, 5);
+          const shiftY = clamp(offsetY * 10, -5, 5);
+          card.style.setProperty("--glass-shift-x", `${shiftX}px`);
+          card.style.setProperty("--glass-shift-y", `${shiftY}px`);
+        });
+
+        card.addEventListener("pointerleave", () => {
+          card.style.setProperty("--glass-shift-x", "0px");
+          card.style.setProperty("--glass-shift-y", "0px");
+        });
+      });
+    </script>
   </body>
 </html>

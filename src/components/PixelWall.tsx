@@ -33,8 +33,8 @@ export function PixelWall() {
     if (!ctx) return;
 
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    const step = 18;
-    const cell = 15;
+    const step = 12;
+    const cell = 10;
     let width = 0;
     let height = 0;
     let cols = 0;
@@ -87,7 +87,7 @@ export function PixelWall() {
         });
       }
 
-      const blockCount = Math.floor((cols * rows) / 140);
+      const blockCount = Math.floor((cols * rows) / 150);
       for (let i = 0; i < blockCount; i += 1) {
         blocks.push({
           x: Math.floor(seeded(i, 2.1) * cols),
@@ -117,7 +117,7 @@ export function PixelWall() {
       const dx = clientX - lastTrailX;
       const dy = clientY - lastTrailY;
       const distance = Math.sqrt(dx * dx + dy * dy);
-      const segments = Math.max(1, Math.ceil(distance / 4));
+      const segments = Math.max(1, Math.ceil(distance / 5));
 
       for (let i = 1; i <= segments; i += 1) {
         const progress = i / segments;
@@ -131,7 +131,7 @@ export function PixelWall() {
       lastTrailX = clientX;
       lastTrailY = clientY;
 
-      while (trail.length > 40) {
+      while (trail.length > 36) {
         trail.shift();
       }
     };
@@ -157,7 +157,7 @@ export function PixelWall() {
       trail = trail
         .map((point) => ({
           ...point,
-          life: point.life - 0.058
+          life: point.life - 0.052
         }))
         .filter((point) => point.life > 0);
 
@@ -183,7 +183,7 @@ export function PixelWall() {
             const dx = x * step - point.x;
             const dy = y * step - point.y;
             const distance = Math.sqrt(dx * dx + dy * dy);
-            const radius = 7 + (1 - point.life) * 3;
+            const radius = 6 + (1 - point.life) * 2;
 
             if (distance < radius) {
               const local = (1 - distance / radius) * point.life;
@@ -194,8 +194,8 @@ export function PixelWall() {
           const cursorDx = x * step - pointerX;
           const cursorDy = y * step - pointerY;
           const cursorDistance = Math.sqrt(cursorDx * cursorDx + cursorDy * cursorDy);
-          if (cursorDistance < 5) {
-            activation = Math.max(activation, (1 - cursorDistance / 5) * 0.95);
+          if (cursorDistance < 4) {
+            activation = Math.max(activation, (1 - cursorDistance / 4) * 0.96);
           }
 
           let outerFill = "";
@@ -204,7 +204,7 @@ export function PixelWall() {
             const r = Math.round(24 + activation * 18);
             const g = Math.round(138 + activation * 94);
             const b = Math.round(24 + activation * 16);
-            outerFill = `rgba(${Math.max(12, r - 14)}, ${Math.max(70, g - 38)}, ${Math.max(12, b - 12)}, ${0.72})`;
+            outerFill = `rgba(${Math.max(12, r - 16)}, ${Math.max(70, g - 44)}, ${Math.max(12, b - 14)}, ${0.76})`;
             innerFill = `rgba(${r}, ${g}, ${b}, ${0.42 + activation * 0.32})`;
           } else {
             const channel = Math.max(14, Math.min(92, Math.round(10 + shade * 220)));
@@ -218,6 +218,11 @@ export function PixelWall() {
           ctx.fillRect(px, py, cell, cell);
           ctx.fillStyle = innerFill;
           ctx.fillRect(px + 1, py + 1, cell - 2, cell - 2);
+          ctx.fillStyle =
+            activation > 0.025
+              ? "rgba(6, 26, 8, 0.72)"
+              : "rgba(5, 6, 8, 0.82)";
+          ctx.fillRect(px + Math.floor(cell / 2) - 1, py + Math.floor(cell / 2) - 1, 2, 2);
         }
       }
     };
